@@ -91,7 +91,8 @@ contract AnonymousVoting {
         
         // Allow early ending if caller is the proposal creator
         if (msg.sender == proposalCreator[_proposalId]) {
-            // Creator can end early
+            // Update endTime to current time to mark voting as complete
+            proposal.endTime = block.timestamp;
         } else {
             // Others must wait for the end time
             require(block.timestamp >= proposal.endTime, "Voting period active");
