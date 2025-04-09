@@ -1,5 +1,9 @@
 # Anonymous Voting Contract
 
+<p align="center">
+  <img src="assets/vote.png" alt="Seismic Vote Logo - A rock golem chef with a voting box" width="200"/>
+</p>
+
 A secure and anonymous voting system built on the Seismic devnet. The contract allows for proposal creation, anonymous voting, and early vote termination by proposal creators.
 
 > **Contract Address**: [0xF050f37a7F8823e5BAe62962B0345D6Be736E35A](https://explorer-2.seismicdev.net/address/0xF050f37a7F8823e5BAe62962B0345D6Be736E35A)
