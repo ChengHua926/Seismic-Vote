@@ -2,7 +2,24 @@
 
 A secure and anonymous voting system built on the Seismic devnet. The contract allows for proposal creation, anonymous voting, and early vote termination by proposal creators.
 
-## Contract Overview
+> **Contract Address**: [0xF050f37a7F8823e5BAe62962B0345D6Be736E35A](https://explorer-2.seismicdev.net/address/0xF050f37a7F8823e5BAe62962B0345D6Be736E35A)
+
+## 🚀 Quick Start
+
+This guide assumes you have already completed the [Seismic installation process](https://docs.seismic.systems/onboarding/publish-your-docs).
+
+1. Get test ETH from [Seismic Faucet](https://faucet-2.seismicdev.net/)
+2. Set up your private key:
+```bash
+export PRIVATE_KEY=your_private_key_here
+```
+3. Run the deployment script:
+```bash
+chmod +x script/deploy.sh
+./script/deploy.sh
+```
+
+## 📝 Contract Overview
 
 The `AnonymousVoting` contract implements a secure voting system with the following key features:
 - Proposal creation with customizable duration
@@ -12,39 +29,66 @@ The `AnonymousVoting` contract implements a secure voting system with the follow
 - Encrypted vote storage
 - Time-based voting windows
 
-## Testing
+## 🧪 Testing
 
-The contract includes comprehensive tests covering all major functionality:
+The contract includes comprehensive tests covering all major functionality. Here are some key test examples:
 
 ```solidity
-// Example test for proposal creation
+// Test for proposal creation
 function testCreateProposal() public {
     vm.startPrank(alice);
     uint256 proposalId = voting.createProposal("Test Proposal", 1 days);
-    // ... verification code
+    
+    (string memory description, uint256 startTime, uint256 endTime, bool hasVoted) = 
+        voting.getProposalInfo(proposalId);
+    
+    assertEq(description, "Test Proposal");
+    assertEq(endTime - startTime, 1 days);
+    assertFalse(hasVoted);
+    assertEq(voting.proposalCreator(proposalId), alice);
 }
 
-// Example test for voting
-function testVote() public {
-    // ... voting test code
+// Test for early vote termination
+function testCreatorCanEndVoteEarly() public {
+    vm.startPrank(alice);
+    uint256 proposalId = voting.createProposal("Test Proposal", 1 days);
+    vm.stopPrank();
+
+    vm.warp(block.timestamp + 12 hours);
+    vm.startPrank(alice);
+    voting.endVoting(proposalId);
+    assertTrue(voting.isVotingComplete(proposalId));
 }
 ```
 
 Run the tests with detailed output:
 ```bash
-forge test -vvv
+sforge test -vvv
 ```
 
-## Deployment
+You should see output similar to this:
+```
+[⠊] Compiling...
+No files changed, compilation skipped
+
+Ran 7 tests for test/vote.t.sol:VoteTest
+[PASS] testCannotVoteAfterEnd() (gas: 139556)
+[PASS] testCannotVoteTwice() (gas: 206833)
+[PASS] testCreateProposal() (gas: 142676)
+[PASS] testCreatorCanEndVoteEarly() (gas: 140388)
+[PASS] testGetResults() (gas: 261616)
+[PASS] testNonCreatorCannotEndVoteEarly() (gas: 139609)
+[PASS] testVote() (gas: 206718)
+Suite result: ok. 7 passed; 0 failed; 0 skipped
+```
+
+## 🔧 Deployment
 
 ### Prerequisites
-1. Install Foundry
-2. Get test ETH from [Seismic Faucet](https://faucet-2.seismicdev.net/)
-3. Set up your environment variables in `.env`:
-```
-SEISMIC_RPC_URL=https://node-2.seismicdev.net/rpc
-SEISMIC_CHAIN_ID=5124
-PRIVATE_KEY=your_private_key_here
+1. Get test ETH from [Seismic Faucet](https://faucet-2.seismicdev.net/)
+2. Set up your private key in the terminal:
+```bash
+export PRIVATE_KEY=your_private_key_here
 ```
 
 ### Deployment Steps
@@ -58,9 +102,7 @@ chmod +x script/deploy.sh
 ./script/deploy.sh
 ```
 
-The contract is deployed at: [0xF050f37a7F8823e5BAe62962B0345D6Be736E35A](https://explorer-2.seismicdev.net/address/0xF050f37a7F8823e5BAe62962B0345D6Be736E35A)
-
-## Interacting with the Contract
+## 💻 Interacting with the Contract
 
 After deployment, you can interact with the contract using cast:
 
