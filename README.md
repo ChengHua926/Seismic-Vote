@@ -1,66 +1,79 @@
-## Foundry
+# Anonymous Voting Contract
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A secure and anonymous voting system built on the Seismic devnet. The contract allows for proposal creation, anonymous voting, and early vote termination by proposal creators.
 
-Foundry consists of:
+## Contract Overview
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+The `AnonymousVoting` contract implements a secure voting system with the following key features:
+- Proposal creation with customizable duration
+- Anonymous voting mechanism
+- Vote counting for and against proposals
+- Early termination capability for proposal creators
+- Encrypted vote storage
+- Time-based voting windows
 
-## Documentation
+## Testing
 
-https://book.getfoundry.sh/
+The contract includes comprehensive tests covering all major functionality:
 
-## Usage
+```solidity
+// Example test for proposal creation
+function testCreateProposal() public {
+    vm.startPrank(alice);
+    uint256 proposalId = voting.createProposal("Test Proposal", 1 days);
+    // ... verification code
+}
 
-### Build
-
-```shell
-$ forge build
+// Example test for voting
+function testVote() public {
+    // ... voting test code
+}
 ```
 
-### Test
-
-```shell
-$ forge test
+Run the tests with detailed output:
+```bash
+forge test -vvv
 ```
 
-### Format
+## Deployment
 
-```shell
-$ forge fmt
+### Prerequisites
+1. Install Foundry
+2. Get test ETH from [Seismic Faucet](https://faucet-2.seismicdev.net/)
+3. Set up your environment variables in `.env`:
+```
+SEISMIC_RPC_URL=https://node-2.seismicdev.net/rpc
+SEISMIC_CHAIN_ID=5124
+PRIVATE_KEY=your_private_key_here
 ```
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
+### Deployment Steps
+1. Make the deployment script executable:
+```bash
+chmod +x script/deploy.sh
 ```
 
-### Anvil
-
-```shell
-$ anvil
+2. Run the deployment script:
+```bash
+./script/deploy.sh
 ```
 
-### Deploy
+The contract is deployed at: [0xF050f37a7F8823e5BAe62962B0345D6Be736E35A](https://explorer-2.seismicdev.net/address/0xF050f37a7F8823e5BAe62962B0345D6Be736E35A)
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+## Interacting with the Contract
+
+After deployment, you can interact with the contract using cast:
+
+```bash
+# Create a proposal
+cast send <CONTRACT_ADDRESS> "createProposal(string,uint256)" "Test Proposal" 86400 \
+    --rpc-url https://node-2.seismicdev.net/rpc \
+    --private-key $PRIVATE_KEY
+
+# Get proposal info
+cast call <CONTRACT_ADDRESS> "getProposalInfo(uint256)" 1 \
+    --rpc-url https://node-2.seismicdev.net/rpc
 ```
 
-### Cast
+Replace `<CONTRACT_ADDRESS>` with the deployed contract address.
 
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
