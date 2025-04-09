@@ -4,20 +4,10 @@ A secure and anonymous voting system built on the Seismic devnet. The contract a
 
 > **Contract Address**: [0xF050f37a7F8823e5BAe62962B0345D6Be736E35A](https://explorer-2.seismicdev.net/address/0xF050f37a7F8823e5BAe62962B0345D6Be736E35A)
 
-## 🚀 Quick Start
+
 
 This guide assumes you have already completed the [Seismic installation process](https://docs.seismic.systems/onboarding/publish-your-docs).
 
-1. Get test ETH from [Seismic Faucet](https://faucet-2.seismicdev.net/)
-2. Set up your private key:
-```bash
-export PRIVATE_KEY=your_private_key_here
-```
-3. Run the deployment script:
-```bash
-chmod +x script/deploy.sh
-./script/deploy.sh
-```
 
 ## 📝 Contract Overview
 
