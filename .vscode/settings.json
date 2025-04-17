@@ -1,0 +1,4 @@
+{
+    "solidity.enabledAsYouTypeCompilationErrorCheck": false,
+    // "solidity.validate": false
+}
